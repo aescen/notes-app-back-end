@@ -7,7 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon ./src/server.js",
     "web": "node ./src/server.js",
-    "worker": "node ./src/server.js",
     "lint": "eslint ./"
   },
   "keywords": [],
