@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon ./src/server.js",
-    "web": "node ./src/server.js",
+    "web": "node --optimize_for_size --max_old_space_size=448 --gc_interval=100 ./src/server.js",
     "lint": "eslint ./"
   },
   "keywords": [],
