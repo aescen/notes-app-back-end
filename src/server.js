@@ -1,7 +1,7 @@
 const Hapi = require('@hapi/hapi');
 const routes = require('./routes');
 
-const appPort = process.env.PORT || process.argv[2] || 5000;
+const appPort = process.env.PORT || 5000;
 
 const init = async () => {
   const server = Hapi.server({
