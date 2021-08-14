@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const { Pool } = require('pg');
 const { customAlphabet } = require('nanoid/non-secure');
+const AuthenticationsError = require('../../exceptions/AuthenticationsError');
 const InvariantError = require('../../exceptions/InvariantError');
 const NotFoundError = require('../../exceptions/NotFoundError');
 
@@ -54,6 +55,28 @@ class UsersService {
     }
 
     return result.rows[0];
+  }
+
+  async verifyUserCredential(username, password) {
+    const query = {
+      text: 'SELECT id, password FROM users where username = $1',
+      values: [username],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rowCount) {
+      throw new AuthenticationsError('Kredensial yang anda berikan salah.');
+    }
+
+    const { id, password: hashedPassword } = result.rows[0];
+    const match = await bcrypt.compare(password, hashedPassword);
+
+    if (!match) {
+      throw new AuthenticationsError('Kredensial yang anda berikan salah.');
+    }
+
+    return id;
   }
 }
 
