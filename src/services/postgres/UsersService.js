@@ -37,6 +37,7 @@ class UsersService {
     };
 
     const result = await this._pool.query(query);
+
     if (result.rowCount) {
       throw new InvariantError('Gagal menambahkan user. Username sudah digunakan.');
     }
@@ -57,10 +58,20 @@ class UsersService {
     return result.rows[0];
   }
 
+  async getUsersByUsername(currentsername, username) {
+    const query = {
+      text: 'SELECT id, username, fullname FROM users WHERE username != $1 AND username LIKE $2',
+      values: [currentsername, `%${username}%`],
+    };
+
+    const result = await this._pool.query(query);
+    return result.rows;
+  }
+
   async verifyUserCredential(username, password) {
     const query = {
-      text: 'SELECT id, password FROM users where username = $1',
-      values: [username],
+      text: 'SELECT id, password FROM users WHERE username = $1',
+      values: [String(username)],
     };
 
     const result = await this._pool.query(query);
