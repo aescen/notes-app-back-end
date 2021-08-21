@@ -111,7 +111,7 @@ const init = async () => {
     }
 
     // Server Error
-    if (response instanceof (Error) && !response.isBoom) {
+    if (response instanceof (Error) && response.isServer) {
       console.error(response.stack);
       const newResponse = h.response({
         status: 'error',
