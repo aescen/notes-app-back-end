@@ -1,7 +1,8 @@
 const fs = require('fs');
+const Path = require('path');
 
 class StorageService {
-  constructor(folder) {
+  constructor(folder = Path.resolve(__dirname, 'api/uploads/files/images')) {
     this._folder = folder;
 
     if (!fs.existsSync(folder)) {
@@ -17,7 +18,7 @@ class StorageService {
     return new Promise((resolve, reject) => {
       fileStream.on('error', (error) => reject(error));
       file.pipe(fileStream);
-      file.on('end', () => resolve(fileName));
+      file.on('end', () => resolve(`http://${process.env.HOST}:${process.env.PORT}/uploads/images/${fileName}`));
     });
   }
 }
