@@ -33,8 +33,8 @@ const ExportsValidator = require('./validator/exports');
 
 // uploads
 const uploads = require('./api/uploads');
-// -- const StorageService = require('./services/storage/StorageService');
-const StorageService = require('./services/S3/S3Service');
+const StorageService = require('./services/storage/StorageService');
+// --const StorageService = require('./services/S3/S3Service');
 const UploadsValidator = require('./validator/uploads');
 
 // cache
