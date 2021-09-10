@@ -4,7 +4,7 @@ const NotFoundError = require('../../exceptions/NotFoundError');
 class CacheService {
   constructor() {
     this._cache = redis.createClient({
-      host: process.env.REDIS_HOST,
+      host: process.env.REDIS_SERVER,
     });
 
     this._cache.on('error', (error) => {
