@@ -9,33 +9,42 @@ const ClientError = require('./exceptions/ClientError');
 const collaborations = require('./api/collaborations');
 const CollaborationsService = require('./services/postgres/CollaborationsService');
 const CollaborationValidator = require('./validator/collaboration');
+
 // notes
 const notes = require('./api/notes');
 const NotesService = require('./services/postgres/NotesService');
 const NotesValidator = require('./validator/notes');
+
 // users
 const users = require('./api/users');
 const UsersService = require('./services/postgres/UsersService');
 const UsersValidator = require('./validator/users');
+
 // authentications
 const authentications = require('./api/authentications');
 const AuthenticationsService = require('./services/postgres/AuthenticationsService');
 const TokenManager = require('./tokenize/TokenManager');
 const AuthenticationsValidator = require('./validator/authentications');
+
 // exports
 const _exports = require('./api/exports');
 const ProducerService = require('./services/rabbitmq/ProducerService');
 const ExportsValidator = require('./validator/exports');
+
 // uploads
 const uploads = require('./api/uploads');
-// const StorageService = require('./services/storage/StorageService');
+// -- const StorageService = require('./services/storage/StorageService');
 const StorageService = require('./services/S3/S3Service');
 const UploadsValidator = require('./validator/uploads');
 
+// cache
+const CacheService = require('./services/redis/CacheService');
+
 const init = async () => {
   try {
-    const collaborationsService = new CollaborationsService();
-    const notesService = new NotesService(collaborationsService);
+    const cacheService = new CacheService();
+    const collaborationsService = new CollaborationsService(cacheService);
+    const notesService = new NotesService(collaborationsService, cacheService);
     const usersService = new UsersService();
     const authenticationsService = new AuthenticationsService();
     const storageService = new StorageService();

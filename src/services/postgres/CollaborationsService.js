@@ -5,8 +5,9 @@ const InvariantError = require('../../exceptions/InvariantError');
 const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 16);
 
 class CollaborationsService {
-  constructor() {
+  constructor(cacheService) {
     this._pool = new Pool();
+    this._cacheService = cacheService;
   }
 
   async addCollaboration(userId, noteId) {
@@ -22,6 +23,7 @@ class CollaborationsService {
       throw new InvariantError('Kolaborasi berhasil ditambahkan.');
     }
 
+    await this._cacheService.delete(`notes:${userId}`);
     return result.rows[0].id;
   }
 
@@ -48,6 +50,9 @@ class CollaborationsService {
     if (!result.rowCount) {
       throw new InvariantError('Kolaborasi gagal dihapus.');
     }
+
+    await this._cacheService.delete(`notes:${userId}`);
+    await this._cacheService.delete(`note:${noteId}`); //--
   }
 }
 
